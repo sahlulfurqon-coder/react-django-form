@@ -1,0 +1,30 @@
+import TextField from '@mui/material/TextField';
+import {Controller} from 'react-hook-form'
+
+export default function MyTextField(props) {
+  const {label, width, placeholder, name, control} = props
+  return (
+    
+    <Controller
+      name={name}
+      control={control}
+      render={({
+        field: { onChange, value },
+        fieldState: { error },
+        formsState,
+      }) => (
+        <TextField 
+          sx={{width:{width}}}
+          id="standard-basic"
+          label={label}
+          variant="standard"
+          placeholder={placeholder}
+        />
+      )
+
+      }
+
+    />
+
+  );
+}
