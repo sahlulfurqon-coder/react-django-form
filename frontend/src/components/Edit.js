@@ -1,4 +1,4 @@
-import { React } from 'react'
+import { React, useEffect } from 'react'
 import { Box, Button, Typography } from '@mui/material'
 import MyDatePickerField from '../forms/MyDatePickerField'
 import MyMultilineField from '../forms/MyMultilineField'
@@ -7,9 +7,33 @@ import MyTextField from '../forms/MyTextField'
 import { useForm } from 'react-hook-form'
 import AxiosInstance from './Axios'
 import Dayjs from 'dayjs'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
-const Create = () => {
+const Edit = () => {
+
+  const MyParam = useParams()
+  const MyId = MyParam.id
+  
+
+  const GetData = () => {
+    AxiosInstance.get(`project/${MyId}`).then((res) => {
+      console.log(res.data)
+      setValue('name',res.data.name)
+      setValue('status',res.data.status)
+      setValue('comments',res.data.comments)
+      setValue('start_date',Dayjs(res.data.start_date))
+      setValue('end_date',Dayjs(res.data.end_date))
+
+      
+    })
+
+  }
+
+  useEffect(() => {
+    GetData();
+  },[])
+
+
 
   const navigate = useNavigate()
   const defaultValues = {
@@ -18,7 +42,7 @@ const Create = () => {
     status: '',
 
   }
-  const { handleSubmit, control } = useForm({defaultValues:defaultValues})
+  const { handleSubmit, setValue, control } = useForm({defaultValues:defaultValues})
     const submission = (data) => {
 
       const StartDate = Dayjs(data.start_date["$d"]).format("YYYY-MM-DD")
@@ -106,4 +130,4 @@ const Create = () => {
   )
 }
 
-export default Create
+export default Edit
