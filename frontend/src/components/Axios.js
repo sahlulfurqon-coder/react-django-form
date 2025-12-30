@@ -11,11 +11,6 @@ const AxiosInstance = axios.create({
   }
 })
 
-AxiosInstance.interceptors.request.use(req => {
-  console.log("AXIOS BASE URL:", req.baseURL)
-  console.log("AXIOS URL:", req.url)
-  console.log("AXIOS FULL:", req.baseURL + req.url)
-  return req
-})
+
 
 export default AxiosInstance

@@ -19,9 +19,14 @@ export default function MyMultilineField(props) {
           sx={{width:{width}}}
           label={label}
           multiline
+          onChange={onChange}
+          value={value}
           rows={1}
           variant="standard" 
           placeholder={placeholder}
+          error = {!!error}
+          helperText = {error?.message}
+        
         />
       )
 

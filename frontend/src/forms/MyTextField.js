@@ -11,14 +11,18 @@ export default function MyTextField(props) {
       render={({
         field: { onChange, value },
         fieldState: { error },
-        formsState,
+        formState,
       }) => (
         <TextField 
           sx={{width:{width}}}
+          onChange={onChange}
+          value={value}
           id="standard-basic"
           label={label}
           variant="standard"
           placeholder={placeholder}
+          error = {!!error}
+          helperText = {error?.message}
         />
       )
 

@@ -13,10 +13,11 @@ const Edit = () => {
 
   const MyParam = useParams()
   const MyId = MyParam.id
-  
+ 
 
   const GetData = () => {
     AxiosInstance.get(`project/${MyId}`).then((res) => {
+      
       console.log(res.data)
       setValue('name',res.data.name)
       setValue('status',res.data.status)
@@ -31,9 +32,7 @@ const Edit = () => {
 
   useEffect(() => {
     GetData();
-  },[])
-
-
+  }, [])
 
   const navigate = useNavigate()
   const defaultValues = {
@@ -41,13 +40,15 @@ const Edit = () => {
     comments: '',
     status: '',
 
+
   }
   const { handleSubmit, setValue, control } = useForm({defaultValues:defaultValues})
     const submission = (data) => {
 
       const StartDate = Dayjs(data.start_date["$d"]).format("YYYY-MM-DD")
       const EndDate = Dayjs(data.end_date["$d"]).format("YYYY-MM-DD")
-      AxiosInstance.post('project/',{
+
+      AxiosInstance.put(`project/${MyId}/`, {
         name: data.name,
         status: data.status,
         comments: data.comments,
