@@ -1,86 +1,149 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import AxiosInstance from './Axios'
-import { MaterialReactTable } from 'material-react-table';
-import Dayjs from 'dayjs';
-import { Box, IconButton, } from '@mui/material';
-import { Edit as EditIcon,  Delete as DeleteIcon } from '@mui/icons-material';
-import {Link} from 'react-router-dom';
+import { MaterialReactTable } from 'material-react-table'
+import dayjs from 'dayjs'
+import { Box, IconButton, Chip } from '@mui/material'
+import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material'
+import { Link, useLocation } from 'react-router-dom'
 
 const Home = () => {
-
-
-  const [myData, setMydata] = useState()
+  const [data, setData] = useState([])
   const [loading, setLoading] = useState(true)
+  const location = useLocation()
 
-  const GetData = () => {
-    AxiosInstance.get('project/').then((res) => {
-      setMydata(res.data)
-      console.log(res.data)
-      setLoading(false)
-    })
-
+  const fetchData = () => {
+    AxiosInstance.get('project/')
+      .then((res) => setData(res.data))
+      .finally(() => setLoading(false))
   }
 
   useEffect(() => {
-    GetData();
-  }, [])
+    setLoading(true)
+    fetchData()
+  }, [location.state])
 
-
-
+  /* =======================
+     TABLE COLUMNS
+  ======================= */
   const columns = useMemo(
     () => [
       {
-        accessorKey: 'name', //access nested data with dot notation
-        header: 'Name',
-        size: 150,
+        accessorKey: 'name',
+        header: 'Sample Code',
+        size: 180,
+      },
+      {
+        accessorKey: 'type',
+        header: 'Type',
+        size: 140,
+        filterVariant: 'select',
+        filterSelectOptions: [
+          { text: 'Raw Material', value: 'raw_material' },
+          { text: 'Fatblend', value: 'fatblend' },
+          { text: 'Finished Product', value: 'finished_product' },
+        ],
+        Cell: ({ cell }) => (
+          <Chip
+            label={cell.getValue()}
+            size="small"
+            color="primary"
+            variant="outlined"
+          />
+        ),
+      },
+      {
+        header: 'Tanggal',
+        size: 160,
+        accessorFn: (row) => {
+          if (row.type === 'raw_material') {
+            return row.tanggal_pengisian
+              ? dayjs(row.tanggal_pengisian).format('DD-MM-YYYY')
+              : '-'
+          }
+
+          return row.tanggal_produksi
+            ? dayjs(row.tanggal_produksi).format('DD-MM-YYYY')
+            : '-'
+        },
+      },
+      {
+        accessorKey: 'line',
+        header: 'Line',
+        size: 80,
+        enableGrouping: true,
+        enableColumnFilter: false,
+      },
+      {
+        accessorKey: 'nomor_urut',
+        header: 'No',
+        size: 80,
       },
       {
         accessorKey: 'status',
-        header: 'status',
-        size: 150,
+        header: 'Status',
+        size: 120,
       },
       {
-        accessorKey: 'comments', //normal accessorKey
+        accessorKey: 'comments',
         header: 'Comments',
-        size: 200,
+        size: 220,
       },
       {
-        accessorFn: (row) => Dayjs(row.start_date).format('DD-MM-YYYY'),
-        header: 'Start Date',
-        size: 150,
-      },
-      {
-        accessorFn: (row) => Dayjs(row.end_date).format('DD-MM-YYYY'),
-        header: 'End Date',
-        size: 150,
+        id: 'analyze',
+        header: 'Analyze',
+        size: 120,
+        Cell: ({ row }) => (
+          <Link
+            to={`analyses/${row.original.id}`}
+            style={{
+              textDecoration: 'none',
+              color: '#1976d2',
+              fontWeight: 500,
+            }}
+          >
+            Analyze
+          </Link>
+        ),
       },
     ],
     [],
-  );
+  )
 
   return (
-    <div>
-      {loading ? <p>Loading data ...</p> :
+    <Box>
+      {loading ? (
+        <p>Loading data ...</p>
+      ) : (
         <MaterialReactTable
           columns={columns}
-          data={myData}
+          data={data}
+          enableGrouping
+          initialState={{
+            grouping: ['line'], // 👈 auto group by line
+            expanded: true,     // 👈 langsung kebuka
+          }}
           enableRowActions
-          renderRowActions={({row}) => (
-            <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
-
-              <IconButton color="secondary" component ={Link} to={`edit/${row.original.id}`}>
+          renderRowActions={({ row }) => (
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              <IconButton
+                color="secondary"
+                component={Link}
+                to={`edit/${row.original.id}`}
+              >
                 <EditIcon />
               </IconButton>
-              <IconButton color="error" component ={Link} to={`delete/${row.original.id}`}>
+              <IconButton
+                color="error"
+                component={Link}
+                to={`delete/${row.original.id}`}
+              >
                 <DeleteIcon />
               </IconButton>
             </Box>
           )}
-
-
         />
-      }
-    </div>
+      )}
+    </Box>
   )
 }
 

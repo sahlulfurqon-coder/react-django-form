@@ -56,7 +56,7 @@ const Edit = () => {
         end_date: EndDate,
       })
       .then((res) => {
-        navigate(`/`)
+        navigate('/', { state: { refresh: true } })
       })
     }
     
@@ -67,7 +67,7 @@ const Edit = () => {
 
       <Box sx={{ display: 'flex', width: '100%', backgroundColor: '#00003f', marginBottom: '10px' }}>
         <Typography sx={{ marginLeft:'20px', color: '#fff'}}>
-          Form Sample
+          Edit Form Sample
         </Typography>
       </Box>
 

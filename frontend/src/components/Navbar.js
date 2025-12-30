@@ -13,7 +13,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import HomeFilledIcon from '@mui/icons-material/HomeFilled';
 import InfoIcon from '@mui/icons-material/Info';
-import CreateIcon from '@mui/icons-material/Create';
+import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
 import MenuIcon from '@mui/icons-material/Menu';
 import { IconButton } from '@mui/material';
 
@@ -45,20 +45,20 @@ export default function Navbar(props) {
             </ListItem>
 
             <ListItem disablePadding>
+              <ListItemButton component={Link} to="/create" selected={"/create" === path}>
+                <ListItemIcon>
+                      <BorderColorRoundedIcon/>
+                </ListItemIcon>
+                <ListItemText primary={"Create"} />
+              </ListItemButton>
+            </ListItem>
+
+            <ListItem disablePadding>
               <ListItemButton component={Link} to="/about" selected={"/about" === path}>
                 <ListItemIcon>
                       <InfoIcon/>
                 </ListItemIcon>
                 <ListItemText primary={"About"} />
-              </ListItemButton>
-            </ListItem>
-
-            <ListItem disablePadding>
-              <ListItemButton component={Link} to="/create" selected={"/create" === path}>
-                <ListItemIcon>
-                      <CreateIcon/>
-                </ListItemIcon>
-                <ListItemText primary={"Create"} />
               </ListItemButton>
             </ListItem>
           
@@ -85,7 +85,7 @@ export default function Navbar(props) {
         </IconButton>
 
         <Typography variant="h6" noWrap component="div">
-          Our Application
+          LIMS
         </Typography>
         </Toolbar>
       </AppBar>

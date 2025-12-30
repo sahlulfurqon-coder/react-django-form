@@ -1,60 +1,54 @@
-import * as React from 'react';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import * as React from 'react'
+import {
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select,
+  FormHelperText,
+} from '@mui/material'
 import { Controller } from 'react-hook-form'
-import { FormHelperText } from '@mui/material';
 
-
-export default function MySelectField(props) {
-
-  const { label, name, control, width } = props
-
-
+const MySelectField = ({
+  label,
+  name,
+  control,
+  width = '100%',
+  options = [],
+}) => {
   return (
-
-
-
     <Controller
       name={name}
       control={control}
-      render={({
-        field: { onChange, value },
-        fieldState: { error },
-        formsState,
-      }) => (
-
-        <FormControl variant="standard" sx={{ width: { width } }}>
-          <InputLabel id="demo-simple-select-filled-label">{label}</InputLabel>
+      render={({ field, fieldState }) => (
+        <FormControl
+          variant="standard"
+          sx={{ width }}
+          error={!!fieldState.error}
+        >
+          <InputLabel>{label}</InputLabel>
 
           <Select
-            labelId="demo-simple-select-filled-label"
-            id="demo-simple-select-filled"
-            onChange={onChange}
-            value={value}
-            error = {!!error}
-      
+            {...field}
+            label={label}
           >
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            <MenuItem value={"Open"}>Open</MenuItem>
-            <MenuItem value={"In Progress"}>In Progress</MenuItem>
-            <MenuItem value={"Completed"}>Completed</MenuItem>
+
+            {options.map((opt) => (
+              <MenuItem key={opt.value} value={opt.value}>
+                {opt.label}
+              </MenuItem>
+            ))}
           </Select>
 
-          <FormHelperText sx={{color:'#d32f2f'}}> {error?.message} </FormHelperText>
-
+          <FormHelperText>
+            {fieldState.error?.message}
+          </FormHelperText>
         </FormControl>
-      )
-
-      }
-
+      )}
     />
-
-
-
-
-  );
+  )
 }
+
+export default MySelectField

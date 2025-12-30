@@ -1,9 +1,14 @@
 from rest_framework import serializers
 from .models import *
 
-class ProjectSerializers(serializers.ModelSerializer):
+class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = ('id','name', 'start_date', 'end_date', 'comments', 'status')
+        fields = '__all__'
+
+class AnalysisSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Analysis
+        fields = '__all__'
 
 
